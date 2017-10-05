@@ -1,0 +1,76 @@
+---
+title: "formative.rmd"
+author: "Melanie Nethercott"
+date: "05/10/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Uploading data and installing packages
+
+```{r}
+install.packages ("dplyr")
+install.packages ("tidyr")
+library (dplyr)
+library (tidyr)
+
+D1 <- read.csv("MITx_Harvardx_MOOC_dataset.csv", sep = ",", header = TRUE)
+View(D1)
+```
+
+##The DI suffix appended to some of the variable names means....
+
+
+##Question 5
+```{r}
+###I'm using filter to pull out the rows that completed HarvardX/CS50x in 2012 and were certified. 
+Q5_data <- select(D1, course_id, userid_DI, certified)
+Q5_data <- filter(Q5_data, course_id == "HarvardX/CS50x/2012", certified == "1")
+
+###I'm checking there are no duplicated observations (in terms of studentid) by using unique(). Then, by calling dim() I can find the total number of rows, and therefore how many people were enrolled and received certification.
+Q5_data <- unique(Q5_data, incomparables = FALSE)
+dim(Q5_data)
+
+###The answer to Q6 is 1287 people.
+```
+##Question 6
+```{r}
+Q6_data <- select(D1, course_id, userid_DI, registered, final_cc_cname_DI, start_time_DI)
+###I think dates are in the dd/mm/yy format (i.e. the correct one!) so I'm using 15/10/2012 in my filter argument.
+Q6_data <- filter(Q6_data, course_id == "HarvardX/CS50x/2012", registered == "1", final_cc_cname_DI == "Colombia", start_time_DI == "15/10/2012")
+
+dim(Q6_data)
+###The dataframe returned 10 values, meaning there were 10 people registered for HarvardX/CS50x on October 15th 2012.
+```
+
+##Question 7
+```{r}
+D2 <- select(D1, userid_DI, registered, start_time_DI, final_cc_cname_DI)
+D2 <- filter(D2, registered == "1", final_cc_cname_DI == "Germany")
+```
+
+##Question 8
+```{r}
+###I'm checking the structure of dataframe D2 (I've understood question 8 is to create a new dataframe-D3- based on D2) before changing the structure of the data frame. 
+str(D2)
+
+###The start_time_DI is a factor, and not currently recognized as dates. I'm going to convert the values to dates and create a new column for these values.
+reg_date <- as.Date(D2$start_time_DI, "%d/%m/%Y")
+str(reg_date)
+D2_v2 <- mutate(D2, reg_date = reg_date)
+str(D2_v2)	
+
+###Now the reg_date column has all the registration dates in date format, I am going to try to split the values out and then group them. 
+separate(D2_v2, reg_date, into = c("year", "month", "day"), sep="-")
+groupdates <- group_by(D2_v2, "year", "month")
+summarizedates <- summarize(groupdates)
+combinedates <- paste(summarizedates$year, summarizedates$month)
+
+
+
+reshape(test)
+```
+
