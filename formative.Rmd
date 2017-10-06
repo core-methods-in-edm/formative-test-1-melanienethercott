@@ -7,13 +7,10 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+
 ```
 
-<<<<<<< HEAD
-##Uploading data and installing packages - tada
-=======
-##Uploading data and installing packages
->>>>>>> ec9e4d5119cbeb30919d68957cd57e45827c6c2c
 
 ```{r}
 install.packages ("dplyr")
