@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##Uploading data and installing packages
+##Uploading data and installing packages - tada
 
 ```{r}
 install.packages ("dplyr")
