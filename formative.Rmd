@@ -1,0 +1,108 @@
+---
+title: "formative.rmd"
+author: "Melanie Nethercott"
+date: "05/10/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+```
+
+
+```{r}
+install.packages ("dplyr")
+install.packages ("tidyr")
+install.packages ("lubridate")
+library ("lubridate")
+library (dplyr)
+library (tidyr)
+
+D1 <- read.csv("MITx_Harvardx_MOOC_dataset.csv", sep = ",", header = TRUE)
+View(D1)
+```
+
+<<<<<<< HEAD
+##The DI suffix appended to some of the variable names might mean the values in that particular variable are factors, not characters or numeric values.
+=======
+##The DI suffix appended to some of the variable names means....
+>>>>>>> ec9e4d5119cbeb30919d68957cd57e45827c6c2c
+
+
+##Question 5
+```{r}
+###I'm using filter to pull out the rows that completed HarvardX/CS50x in 2012 and were certified. 
+Q5_data <- select(D1, course_id, userid_DI, certified)
+Q5_data <- filter(Q5_data, course_id == "HarvardX/CS50x/2012", certified == "1")
+
+###I'm checking there are no duplicated observations (in terms of studentid) by using unique(). Then, by calling dim() I can find the total number of rows, and therefore how many people were enrolled and received certification.
+Q5_data <- unique(Q5_data, incomparables = FALSE)
+dim(Q5_data)
+
+<<<<<<< HEAD
+###The answer to Q5 is 1287 people.
+=======
+###The answer to Q6 is 1287 people.
+>>>>>>> ec9e4d5119cbeb30919d68957cd57e45827c6c2c
+```
+##Question 6
+```{r}
+Q6_data <- select(D1, course_id, userid_DI, registered, final_cc_cname_DI, start_time_DI)
+###I think dates are in the dd/mm/yy format (i.e. the correct one!) so I'm using 15/10/2012 in my filter argument.
+Q6_data <- filter(Q6_data, course_id == "HarvardX/CS50x/2012", registered == "1", final_cc_cname_DI == "Colombia", start_time_DI == "15/10/2012")
+
+dim(Q6_data)
+###The dataframe returned 10 values, meaning there were 10 people registered for HarvardX/CS50x on October 15th 2012.
+```
+
+##Question 7
+```{r}
+D2 <- select(D1, userid_DI, registered, start_time_DI, final_cc_cname_DI)
+D2 <- filter(D2, registered == "1", final_cc_cname_DI == "Germany")
+```
+
+##Questions 8 and 9
+```{r}
+###I don't think its possible to create D3 using start_time_DI (I spent ages trying this and ended up getting bogged down in overcomplicated syntax) so am going to use the season and year information included in the course_id values. First, I'm going to select only the variables I need for this question.
+D3 <-select(D1, course_id, userid_DI, registered, start_time_DI)
+
+###I tried to use separate() to turn the course_id column into multiple columns but this just didn't work- possibly because the values are factors and not characters or numeric values and this is messing it up?
+D3test <- separate(D3, course_id, into = "2012", "2012_sping", "2012_fall", "2013_spring", "2013_fall", sep = "2012", "2012_spring", "2012_fall", "2013_spring", "2013_fall", extra = "warn", fill = "warn")
+
+###So...I'm going to try and create a new variable by turning the start_time_DI values into dates rather than factors and then rounding them up into half years. 
+D3date <-as.Date(D3$start_time_DI, tryFormats = c("%d-%m-%Y"))
+D3 <- mutate(D3, start_date = D3date)
+
+round_date <- round_date(D3$start_date, unit = "halfyear")
+D3 <- mutate(D3, start_date_rd = ceiling_date(start_date, unit="halfyear"))
+
+###For some reason, the above steps aren't working- the rounded date is in the wrong format so am going to convert to character, then to date and see if that can get the rounded start date values (variable called: start_date_rd) into Y/M/D format.
+D3 <- mutate(D3, start_date =dmy(start_time_DI))
+round_date <- round_date(D3$start_date, unit = "halfyear")
+D3 <- mutate(D3, start_date_rd = ceiling_date(start_date, unit="halfyear"))
+
+D3 <- select(D3, course_id, userid_DI, registered, start_date_rd)
+
+###I'm going to separate out the years and the first (Spring) or second half (Fall) of each year... but ran out of time. 
+D3<- separate(D3, start_date_rd, c("Year", "Half_of_year"))
+
+```
+
+##Questions 10, 11, 12- didn't get time to complete these questions as got stuck on question 8, so the below are just attempts at writing the code.
+```{r}
+###To convert a data frame to matrix, I would have used:
+M1 <- as.matrix(D3)
+
+###To create a new matrix by transposing M1 I would have used:
+M2 <- t(M1)
+
+###To multiply the matrix I would have used:
+M3 <- select(M2, userid_DI, Year, Spring, Fall)
+M4 <- t(M3) %*% M3
+
+###To convert the diagonal of the matrix I would have used:
+diag(M3) <- NA
+```
+
