@@ -27,7 +27,11 @@ D1 <- read.csv("MITx_Harvardx_MOOC_dataset.csv", sep = ",", header = TRUE)
 View(D1)
 ```
 
+<<<<<<< HEAD
 ##The DI suffix appended to some of the variable names might mean the values in that particular variable are factors, not characters or numeric values.
+=======
+##The DI suffix appended to some of the variable names means....
+>>>>>>> ec9e4d5119cbeb30919d68957cd57e45827c6c2c
 
 
 ##Question 5
@@ -40,7 +44,11 @@ Q5_data <- filter(Q5_data, course_id == "HarvardX/CS50x/2012", certified == "1")
 Q5_data <- unique(Q5_data, incomparables = FALSE)
 dim(Q5_data)
 
+<<<<<<< HEAD
 ###The answer to Q5 is 1287 people.
+=======
+###The answer to Q6 is 1287 people.
+>>>>>>> ec9e4d5119cbeb30919d68957cd57e45827c6c2c
 ```
 ##Question 6
 ```{r}
